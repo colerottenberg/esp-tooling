@@ -12,6 +12,6 @@ pip install -r requirements.txt
 
 ## Usage
 ```
-python3 esp-tooling.py
+python3 tool.py
 ```
 Menu options include flashing the firmware, erasing the flash, and exiting the program.
