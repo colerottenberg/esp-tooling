@@ -18,7 +18,7 @@ def flash(version):
     boot = f"{version}/top-panel-firmware.ino.bootloader.bin"
     bin = f"{version}/top-panel-firmware.ino.bin"
     parts = f"{version}/top-panel-firmware.ino.partitions.bin"
-    esp.main(['--chip', 'esp32', '--port', '/dev/ttyUSB0', '--baud', '921600', '--before', 'default_reset', '--after', 'hard_reset', 'write_flash', '-z', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '4MB', '0x1000', boot, '0x8000', parts, '0x10000', bin])
+    esp.main(['--chip', 'esp32', '--baud', '921600', '--before', 'default_reset', '--after', 'hard_reset', 'write_flash', '-z', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '4MB', '0x1000', boot, '0x8000', parts, '0x10000', bin])
 
 def selection(releases):
     menu = "Select an option:\n1. Flash\n2. Erase\n3. Exit\n"
@@ -38,7 +38,7 @@ def selection(releases):
             print("Invalid choice")
             selection()
     elif choice == "2":
-        esp.main(['--chip', 'esp32', '--port', '/dev/ttyUSB0', '--baud', '460800', 'erase_flash'])
+        esp.main(['--chip', 'esp32', '--baud', '460800', 'erase_flash'])
     elif choice == "3":
         sys.exit()
     else:
