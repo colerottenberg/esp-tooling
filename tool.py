@@ -2,6 +2,7 @@ import sys
 import os
 import esptool as esp
 import json
+from PyQt5.QtWidgets import QWidget, QApplication, QPushButton, QVBoxLayout, QLabel
 # Now for the simple class
 # We need to create a simple CLI tool for flashing the esp32
 def grab(version):
@@ -36,20 +37,35 @@ def selection(releases):
             sys.exit()
         else:
             print("Invalid choice")
-            selection()
+            selection(releases)
     elif choice == "2":
         esp.main(['--chip', 'esp32', '--baud', '460800', 'erase_flash'])
     elif choice == "3":
         sys.exit()
     else:
         print("Invalid choice")
-        selection()
+        selection(releases)
 
-if __name__ == '__main__':
-    print("-------------------")
-    print("ESP32 Flashing Tool")
-    print("-------------------")
-    # Load the releases.json file that contains what is stable and what is beta
-    json_file = open("releases.json")
-    releases = json.load(json_file)
-    selection(releases)
+# Nice CLI title
+print("-------------------")
+print("ESP32 Flashing Tool")
+print("-------------------")
+# Load the releases.json file that contains what is stable and what is beta
+json_file = open("releases.json")
+releases = json.load(json_file)
+
+# Boilerplate for the GUI
+application = QApplication([])
+main_window = QWidget()
+main_window.setGeometry(0,0,200,200)
+main_window.setWindowTitle("ESP32 Flashing Tool")
+
+# Behavior for the flashing buttons
+flashStable = QPushButton(parent=main_window, text="Flash Stable")
+flashStable.clicked.connect(lambda: flash(releases["stable"]))
+flashStable.move(0, 30)
+flashBeta = QPushButton(parent=main_window, text="Flash Beta")
+flashBeta.clicked.connect(lambda: flash(releases["beta"]))
+
+main_window.show()
+application.exec_()
