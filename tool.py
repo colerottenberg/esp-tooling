@@ -1,3 +1,10 @@
+"""
+This tool was built by Cole Rottenberg(cole@bluevigil.com) for Blue Vigil
+This is a tool for flashing the esp32 with the latest firmware. It is desgined to flash the top panel on the ALED using a dropdown however, any esp32 can be flashed using the custom drop box option
+To operate this tool, simply run the script and select the version you want to flash. Then click the flash button. 
+The button will turn red while flashing and green when finished. If you want to erase the esp32, click the erase button.
+ESP32 must be plugged in before running this tool
+"""
 import sys, os, json, esptool as esp, time
 from PyQt5.QtWidgets import (
     QApplication, 
@@ -13,6 +20,7 @@ from PyQt5.QtGui import (
     QColor,
 )
 # We need to create a simple CLI tool for flashing the esp32
+# This is LLM generated so all creds go to those countless stack overflow posts
 class DropZone(QWidget):
     def __init__(self):
         super().__init__()
@@ -40,6 +48,7 @@ class DropZone(QWidget):
 # GLOBALS SECTION:
 
 # Json release file parsed into a dict
+# Load the releases.json file that contains what is stable and what is beta
 json_file = open("releases.json")
 releases = json.load(json_file)
 
@@ -157,9 +166,7 @@ print("-------------------")
 print("ESP32 Flashing Tool")
 print("-------------------")
 
-# Load the releases.json file that contains what is stable and what is beta
-
-
-# Final GUI calls
+# EXE the App
 main_window.show()
 application.exec_()
+print("Exiting...")
