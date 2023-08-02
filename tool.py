@@ -5,20 +5,20 @@ To operate this tool, simply run the script and select the version you want to f
 The button will turn red while flashing and green when finished. If you want to erase the esp32, click the erase button.
 ESP32 must be plugged in before running this tool
 """
-import sys, os, json, esptool as esp, time
+import sys, os, json, esptool as esp
 from PyQt5.QtWidgets import (
-    QApplication, 
-    QWidget, 
-    QPushButton, 
-    QComboBox, 
-    QTextEdit, 
-    QLabel, 
+    QApplication,
+    QWidget,
+    QPushButton,
+    QComboBox,
+    QLabel,
     QVBoxLayout,
-) # Now for the simple class
+)  # Now for the simple class
 from PyQt5.QtGui import (
-    QPalette, 
+    QPalette,
     QColor,
 )
+
 # We need to create a simple CLI tool for flashing the esp32
 # This is LLM generated so all creds go to those countless stack overflow posts
 class DropZone(QWidget):
@@ -28,7 +28,7 @@ class DropZone(QWidget):
 
     def initUI(self):
         self.setAcceptDrops(True)
-        self.label = QLabel('Drop a folder of \nbinary here...', self)
+        self.label = QLabel("Drop a folder of \nbinary here...", self)
 
         layout = QVBoxLayout(self)
         layout.addWidget(self.label)
@@ -42,9 +42,11 @@ class DropZone(QWidget):
 
     def dropEvent(self, e):
         file_path = e.mimeData().urls()[0].toLocalFile()
-        self.label.setText(f'File path: {file_path}')
-        print(f'File path: {file_path}')
+        self.label.setText(f"File path: {file_path}")
+        print(f"File path: {file_path}")
         flashCaller(file_path)
+
+
 # GLOBALS SECTION:
 
 # Json release file parsed into a dict
@@ -55,12 +57,12 @@ releases = json.load(json_file)
 # Boilerplate for the GUI
 application = QApplication([])
 main_window = QWidget()
-main_window.setGeometry(0,0,200,210)
+main_window.setGeometry(0, 0, 200, 210)
 main_window.setWindowTitle("ESP32 Flashing Tool")
 
 # Adding a Done/Finished Widget for after flashing
 done_window = QWidget()
-done_window.setGeometry(0,0,180,60)
+done_window.setGeometry(0, 0, 180, 60)
 done_window.setWindowTitle("Done")
 done_message = QLabel(parent=done_window, text="Finished Operation")
 ok_button = QPushButton(parent=done_window, text="OK")
@@ -93,6 +95,8 @@ def version():
         return releases["beta"]
     else:
         raise Exception("Invalid version")
+
+
 flashButton.clicked.connect(lambda: flashCaller(version()))
 
 # Adding a erase button
@@ -112,14 +116,39 @@ def grab(version):
     ex = f"gh release download {version}  -D ./{version} --repo BlueVigil/top-panel-firmware"
     os.system(ex)
     # If it can enter the directory, then it exists
-    
+
+
 def flash(version):
     grab(version)
     print("Flashing version: " + version)
     boot = f"{version}/top-panel-firmware.ino.bootloader.bin"
     bin = f"{version}/top-panel-firmware.ino.bin"
     parts = f"{version}/top-panel-firmware.ino.partitions.bin"
-    esp.main(['--chip', 'esp32', '--baud', '921600', '--before', 'default_reset', 'write_flash', '-z', '--flash_mode', 'dio', '--flash_freq', '80m', '--flash_size', '4MB', '0x1000', boot, '0x8000', parts, '0x10000', bin])
+    esp.main(
+        [
+            "--chip",
+            "esp32",
+            "--baud",
+            "921600",
+            "--before",
+            "default_reset",
+            "write_flash",
+            "-z",
+            "--flash_mode",
+            "dio",
+            "--flash_freq",
+            "80m",
+            "--flash_size",
+            "4MB",
+            "0x1000",
+            boot,
+            "0x8000",
+            parts,
+            "0x10000",
+            bin,
+        ]
+    )
+
 
 def flashCaller(version):
     # This will call the flash function with the version as well as quit the application and color the button
@@ -131,9 +160,11 @@ def flashCaller(version):
     flashButton.setPalette(palette)
     done_window.show()
 
+
 def eraseCaller():
-    esp.main(['--chip', 'esp32', '--baud', '460800', 'erase_flash'])
+    esp.main(["--chip", "esp32", "--baud", "460800", "erase_flash"])
     done_window.show()
+
 
 def selection(releases):
     menu = "Select an option:\n1. Flash\n2. Erase\n3. Exit\n"
@@ -153,12 +184,13 @@ def selection(releases):
             print("Invalid choice")
             selection(releases)
     elif choice == "2":
-        esp.main(['--chip', 'esp32', '--baud', '460800', 'erase_flash'])
+        esp.main(["--chip", "esp32", "--baud", "460800", "erase_flash"])
     elif choice == "3":
         sys.exit()
     else:
         print("Invalid choice")
         selection(releases)
+
 
 # Nice CLI title
 # Not needed now that we have a GUI
