@@ -20,7 +20,7 @@ class DropZone(QWidget):
 
     def initUI(self):
         self.setAcceptDrops(True)
-        self.label = QLabel('Drop a file here...', self)
+        self.label = QLabel('Drop a folder of \nbinary here...', self)
 
         layout = QVBoxLayout(self)
         layout.addWidget(self.label)
@@ -59,15 +59,14 @@ ok_button.move(30, 30)
 ok_button.clicked.connect(lambda: application.quit())
 
 # Adding a file selection button for custom bin filescustom bin files
-pathBox = QTextEdit(parent=main_window)
-pathBox.setPlaceholderText("Enter a path to dir")
-pathBox.setGeometry(0, 60, 200, 30)
+# pathBox = QTextEdit(parent=main_window)
+# pathBox.setPlaceholderText("Enter a path to dir")
+# pathBox.setGeometry(0, 60, 200, 30)
 
 # Behavior for the flashing buttons
 versionChoice = QComboBox(parent=main_window)
 versionChoice.addItem("ALED Stable")
 versionChoice.addItem("ALED Beta")
-versionChoice.addItem("Custom")
 versionChoice.setGeometry(0, 0, 200, 30)
 
 # Flashing button
@@ -84,8 +83,7 @@ def version():
     elif versionChoice.currentText() == "ALED Beta":
         return releases["beta"]
     else:
-        return pathBox.toPlainText()
-
+        raise Exception("Invalid version")
 flashButton.clicked.connect(lambda: flashCaller(version()))
 
 # Adding a erase button
@@ -95,7 +93,7 @@ eraseButton.clicked.connect(lambda: eraseCaller())
 
 drop_zone = DropZone()
 drop_zone.setParent(main_window)
-drop_zone.setGeometry(0, 90, 200, 90)
+drop_zone.setGeometry(0, 60, 200, 120)
 
 # Now we define all function calls
 def grab(version):
