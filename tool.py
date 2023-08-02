@@ -2,9 +2,35 @@ import sys
 import os
 import esptool as esp
 import json
-from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QComboBox, QTextEdit
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QComboBox, QTextEdit, QLabel, QVBoxLayout
 # Now for the simple class
 # We need to create a simple CLI tool for flashing the esp32
+
+class DropZone(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        self.setAcceptDrops(True)
+        self.label = QLabel('Drop a file here...', self)
+
+        layout = QVBoxLayout(self)
+        layout.addWidget(self.label)
+        self.setLayout(layout)
+
+    def dragEnterEvent(self, e):
+        if e.mimeData().hasUrls():
+            e.accept()
+        else:
+            e.ignore()
+
+    def dropEvent(self, e):
+        file_path = e.mimeData().urls()[0].toLocalFile()
+        self.label.setText(f'File path: {file_path}')
+        print(f'File path: {file_path}')
+        flash(file_path)
+
 def grab(version):
     print("Grabbing version: " + version)
     # Grab specific version bins from local repo or from github
@@ -52,7 +78,7 @@ releases = json.load(json_file)
 # Boilerplate for the GUI
 application = QApplication([])
 main_window = QWidget()
-main_window.setGeometry(0,0,200,200)
+main_window.setGeometry(0,0,200,120)
 main_window.setWindowTitle("ESP32 Flashing Tool")
 
 def flash(version):
@@ -94,6 +120,9 @@ eraseButton = QPushButton(parent=main_window, text="Erase")
 eraseButton.move(120, 30)
 eraseButton.clicked.connect(lambda: print(esp.main(['--chip', 'esp32', '--baud', '460800', 'erase_flash'])))
 
+drop_zone = DropZone()
+drop_zone.setParent(main_window)
+drop_zone.setGeometry(0, 90, 200, 30)
 
 # Final GUI calls
 main_window.show()
