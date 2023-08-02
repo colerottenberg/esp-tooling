@@ -36,7 +36,7 @@ class DropZone(QWidget):
         file_path = e.mimeData().urls()[0].toLocalFile()
         self.label.setText(f'File path: {file_path}')
         print(f'File path: {file_path}')
-        flash(file_path)
+        flashCaller(file_path)
 # GLOBALS SECTION:
 
 # Json release file parsed into a dict
