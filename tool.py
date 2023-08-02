@@ -40,6 +40,7 @@ def selection(releases):
         selection(releases)
 
 # Nice CLI title
+# Not needed now that we have a GUI
 print("-------------------")
 print("ESP32 Flashing Tool")
 print("-------------------")
