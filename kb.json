@@ -1,0 +1,43 @@
+// Place your key bindings in this file to override the defaults
+[
+    {
+        "key": "ctrl+k",
+        "command": "workbench.action.navigateUp",
+    },
+    {
+        "key": "ctrl+j",
+        "command": "workbench.action.navigateDown",
+    },
+    {
+        "key": "ctrl+h",
+        "command": "workbench.action.navigateLeft",
+    },
+    {
+        "key": "ctrl+l",
+        "command": "workbench.action.navigateRight",
+    },
+    {
+        "key": "shift+k",
+        "command": "workbench.action.nextEditor",
+        "when": "vim.mode != 'Insert'"
+    },
+    {
+        "key": "shift+j",
+        "command": "workbench.action.previousEditor",
+        "when": "vim.mode != 'Insert'"
+    },
+    {
+        "key": "ctrl+s",
+        "command": "workbench.action.files.save",
+    },
+    {
+        "key": "ctrl+w",
+        "command": "workbench.action.closeActiveEditor",
+        "when": "vim.mode == 'Normal' && !editorReadonly"
+    },
+    {
+        "key": "ctrl+e",
+        "command": "workbench.action.toggleSidebarVisibility",
+        "when": "vim.mode != 'Insert'"
+    }
+]
