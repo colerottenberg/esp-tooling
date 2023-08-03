@@ -165,33 +165,6 @@ def eraseCaller():
     esp.main(["--chip", "esp32", "--baud", "460800", "erase_flash"])
     done_window.show()
 
-
-def selection(releases):
-    menu = "Select an option:\n1. Flash\n2. Erase\n3. Exit\n"
-    bin_menu = "Select a version:\n1. Stable\n2. Beta\n3. Exit\n"
-    print(menu)
-    choice = input("Enter your choice: ")
-    if choice == "1":
-        print(bin_menu)
-        bin_choice = input("Enter your choice: ")
-        if bin_choice == "1":
-            flash(releases["stable"])
-        elif bin_choice == "2":
-            flash(releases["beta"])
-        elif bin_choice == "3":
-            sys.exit()
-        else:
-            print("Invalid choice")
-            selection(releases)
-    elif choice == "2":
-        esp.main(["--chip", "esp32", "--baud", "460800", "erase_flash"])
-    elif choice == "3":
-        sys.exit()
-    else:
-        print("Invalid choice")
-        selection(releases)
-
-
 # Nice CLI title
 # Not needed now that we have a GUI
 print("-------------------")
